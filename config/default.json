@@ -4,6 +4,7 @@
     "position":{
         "lat":48.8583712902609,
         "lon":2.2944838600952133,
-        "MaxDistance":10
+        "instantWarningDistance":10,
+        "watchDistance":30
     }
 }
