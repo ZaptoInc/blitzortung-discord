@@ -1,0 +1,24 @@
+{
+  "name": "blitzortung-discord",
+  "version": "1.0.0",
+  "description": "a discord bot that warns in dm then there's a storm near a predefined area",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ZaptoInc/blitzortung-discord.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ZaptoInc/blitzortung-discord/issues"
+  },
+  "homepage": "https://github.com/ZaptoInc/blitzortung-discord#readme",
+  "dependencies": {
+    "config": "^3.3.8",
+    "discord": "^0.8.2",
+    "ws": "^8.9.0"
+  }
+}

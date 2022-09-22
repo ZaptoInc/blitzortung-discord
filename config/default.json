@@ -1,0 +1,9 @@
+{
+    "discordToken":"TOKENHERE",
+    "discordId":"405842875411202060",
+    "position":{
+        "lat":48.8583712902609,
+        "lon":2.2944838600952133,
+        "MaxDistance":500
+    }
+}
