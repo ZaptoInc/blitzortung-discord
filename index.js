@@ -1,6 +1,14 @@
 var websocket = require('ws');
 const config = require('config');
 
+var latestWarn = 0
+var RecentImpacts = []
+
+function DecodedDataManager(data) {
+    var impactDistance = calcCrow(data.lat, data.lon, config.position.lat, config.position.lon)
+    console.log(impactDistance, 'km')
+}
+
 var wsServerId = 1
 var ws;
 function NewWebSocket(){
@@ -24,7 +32,7 @@ function NewWebSocket(){
         ws.on('message', function message(data) {
             try {
                 var dataObj = JSON.parse(decode(Buffer.from(data).toString()))
-                console.log(dataObj.lat, dataObj.lon)
+                DecodedDataManager(dataObj)
             } catch (error) {
                 console.log(error)
             }
@@ -80,13 +88,9 @@ function decode(i) {
     var data = i.split("");
     var name = data[0];
     var prefix = name;
-    /** @type {!Array} */
     var param = [name];
-    /** @type {number} */
     var x = 256;
-    /** @type {number} */
     o = x;
-    /** @type {number} */
     i = 1;
     for (; i < data.length; i++) {
         n = data[i].charCodeAt(0);
