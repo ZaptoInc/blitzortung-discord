@@ -1,23 +1,40 @@
-var ws = require('ws');
+var websocket = require('ws');
 const config = require('config');
 
-var wsClient = {}
-
 var wsServerId = 1
-
-function NewWebSocket() {
+var ws;
+function NewWebSocket(){
     try {
         var wsServer = 'wss://ws' + wsServerId  + '.blitzortung.org/'
         console.log('connecting to server %s', wsServerId)
-        wsClient = new ws.WebSocket(wsServer, {
-            perMessageDeflate: false
+        ws = new websocket.WebSocket(wsServer);
+        ws.on('open', function() {
+            console.log('socket connected')
+            ws.send('{"a":767}');
+        });
+        ws.on('error', function() {
+            console.log('socket errored');
+            NewWebSocketServer()
+            setTimeout(NewWebSocket, 1000);
+        });
+        ws.on('close', function() {
+            console.log('socket disconnected')
+            setTimeout(NewWebSocket, 1000);
+        });
+        ws.on('message', function message(data) {
+            try {
+                var dataObj = JSON.parse(decode(Buffer.from(data).toString()))
+                console.log(dataObj.lat, dataObj.lon)
+            } catch (error) {
+                console.log(error)
+            }
         });
     } catch (error) {
-
-        NewWebSocket()
+        NewWebSocketServer()
+        setTimeout(NewWebSocket, 1000);
     }
 
-}
+};
 
 function NewWebSocketServer(){
     if (wsServerId = 8) {
@@ -27,27 +44,7 @@ function NewWebSocketServer(){
     }
 }
 
-NewWebSocket()
-
-wsClient.on('open', function open() {
-    console.log('connected')
-    wsClient.send('{"a":767}');
-});
-
-wsClient.on('message', function message(data) {
-    try {
-        var dataObj = JSON.parse(decode(Buffer.from(data).toString()))
-        //console.log(dataObj.lat, dataObj.lon)
-    } catch (error) {
-        console.log(error)
-    }
-    //console.log('received: %s', decode(Buffer.from(data).toString()));
-});
-
-wsClient.on('close', function close() {
-    console.log('disconnected')
-    NewWebSocket()
-});
+NewWebSocket();
 
 // Imported from https://stackoverflow.com/questions/18883601/function-to-calculate-distance-between-two-coordinates
 // --->
