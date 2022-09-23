@@ -3,12 +3,22 @@ const { Client, GatewayIntentBits, EmbedBuilder } = require('discord.js');
 
 const config = require('config');
 
-const client = new Client({ intents: [] });
+const client = new Client({
+    intents:
+        [
+            
+        ]
+});
 
 client.once('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
     NewWebSocket();
-    setInterval(SendPrivateMessage, 60000);
+    setInterval(SendPrivateMessage, 5 * 60000);
+    const user = client.users.fetch(config.discordId).then((user) => {
+        user.send({ embeds: [embeds] }).catch(() => {
+            console.log("User has DMs closed or has no mutual servers with the bot :(");
+        });
+    }).catch(() => null);
 });
 client.login(config.discordToken);
 
@@ -28,10 +38,6 @@ function DecodedDataManager(data) {
         }
     }
 
-
-
-
-
     console.log(impactDistance, 'km')
 }
 
@@ -49,10 +55,10 @@ async function SendPrivateMessage(instant, data) {
         if (instant) {
             var impactDistance = calcCrow(data.lat, data.lon, config.position.lat, config.position.lon)
             var instantEmbed = new EmbedBuilder()
-            .setColor(0xFF0000)
-            .setTitle('Instant Warning!')
-            .setDescription('A thunderbold has hit ' + impactDistance + 'km away <t:' + (data.time / 1000000000) + ':R> ')
-            embeds.push(instantEmbed)
+                .setColor(0xFF0000)
+                .setTitle('Instant Warning!')
+                .setDescription('A thunderbold has hit ' + Math.round(impactDistance, 2) + 'km away <t:' + Math.round(data.time / 1000000000) + ':R> ')
+                embeds.push(instantEmbed)
         }
 
         if (RecentImpacts.length) {
@@ -66,14 +72,15 @@ async function SendPrivateMessage(instant, data) {
             });
             var closestImpactDistance = calcCrow(closest.lat, closest.lon, config.position.lat, config.position.lon)
             var recentEmbed = new EmbedBuilder()
-            .setColor(0xFF8000)
-            .setTitle('Closeby Warning!')
-            .setDescription(RecentImpacts.length + ' thunderbold has hit with the closest' + closestImpactDistance + 'km away <t:' + (closest.time / 1000000000) + ':R> ')
-            embeds.push(recentEmbed)
+                .setColor(0xFF8000)
+                .setTitle('Closeby Warning!')
+                .setDescription(RecentImpacts.length + ' thunderbold has hit since the last warning with the closest ' + Math.round(closestImpactDistance, 2) + 'km away <t:' + Math.round(closest.time / 1000000000) + ':R> ')
+                embeds.push(recentEmbed)
+            RecentImpacts = []
         }
 
         if (embeds.length) {
-            await user.send({ embeds: [embeds] }).catch(() => {
+            await user.send({ embeds: embeds }).catch(() => {
                 console.log("User has DMs closed or has no mutual servers with the bot :(");
             });
         }
