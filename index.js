@@ -14,11 +14,6 @@ client.once('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
     NewWebSocket();
     setInterval(SendPrivateMessage, 5 * 60000);
-    const user = client.users.fetch(config.discordId).then((user) => {
-        user.send({ embeds: [embeds] }).catch(() => {
-            console.log("User has DMs closed or has no mutual servers with the bot :(");
-        });
-    }).catch(() => null);
 });
 client.login(config.discordToken);
 
@@ -33,12 +28,10 @@ function DecodedDataManager(data) {
     }
 
     if (impactDistance < config.position.instantWarningDistance) {
-        if (latestWarn + 60000 < Date.now()) {
+        if (latestWarn + 10000 < Date.now()) {
             SendPrivateMessage(true, data)
         }
     }
-
-    console.log(impactDistance, 'km')
 }
 
 async function SendPrivateMessage(instant, data) {
