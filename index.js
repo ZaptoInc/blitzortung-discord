@@ -6,7 +6,7 @@ const config = require('config');
 const client = new Client({
     intents:
         [
-            
+
         ]
 });
 
@@ -57,7 +57,7 @@ async function SendPrivateMessage(instant, data) {
             var instantEmbed = new EmbedBuilder()
                 .setColor(0xFF0000)
                 .setTitle('Instant Warning!')
-                .setDescription('A thunderbold has hit ' + Math.round(impactDistance, 2) + 'km away <t:' + Math.round(data.time / 1000000000) + ':R> ')
+                .setDescription('A thunderbolt has hit ' + Math.round(impactDistance, 2) + 'km away <t:' + Math.round(data.time / 1000000000) + ':R> ')
                 embeds.push(instantEmbed)
         }
 
@@ -74,7 +74,7 @@ async function SendPrivateMessage(instant, data) {
             var recentEmbed = new EmbedBuilder()
                 .setColor(0xFF8000)
                 .setTitle('Closeby Warning!')
-                .setDescription(RecentImpacts.length + ' thunderbold has hit since the last warning with the closest ' + Math.round(closestImpactDistance, 2) + 'km away <t:' + Math.round(closest.time / 1000000000) + ':R> ')
+                .setDescription(RecentImpacts.length + ' thunderbolt has hit since the last warning with the closest ' + Math.round(closestImpactDistance, 2) + 'km away <t:' + Math.round(closest.time / 1000000000) + ':R> ')
                 embeds.push(recentEmbed)
             RecentImpacts = []
         }
